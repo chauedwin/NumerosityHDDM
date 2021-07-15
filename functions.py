@@ -18,16 +18,14 @@ def calcstderr(data, col):
     num = float(0)
     count = 0
     for i, subj_data in data.groupby('subj_idx'):
-        num += subj_data[col].std()
+        num += subj_data[col].var()
         count += 1
-    return(num/count)
-
-
-# In[2]:
+    s_w = np.sqrt(num/(count)) / (count - 1)
+    return(s_w)
 
 
 # if subject id is not given, plot the means including std
-def plotbars(flashuni, beepuni, flashcongr, beepcongr, title1, title2, subjid = -1):
+def plotbars(flashuni, beepuni, flashcongr, beepcongr, title1, title2, width, subjid = -1):
     if (subjid != -1):
         flashuni = flashuni.loc[flashuni['subj_idx'] == subjid]
         beepuni = beepuni.loc[beepuni['subj_idx'] == subjid]
@@ -54,9 +52,9 @@ def plotbars(flashuni, beepuni, flashcongr, beepcongr, title1, title2, subjid = 
         beepcongraccerr = calcstderr(beepcongr, 'acc')
         #allcongraccerr = (flashcongraccerr + beepcongraccerr) / 2
         plt.bar(y_pos, performance, yerr=[flashuniaccerr, flashcongraccerr, beepuniaccerr, beepcongraccerr], 
-                color=['#1f77b4', '#ff7f0e', '#d62728', '#9467bd'], ecolor='black', capsize=10)
+                color=['#1f77b4', '#ff7f0e', '#d62728', '#9467bd'], ecolor='black', capsize=10, rwidth = width)
     else:
-        plt.bar(y_pos, performance, color=['#1f77b4', '#ff7f0e', '#d62728', '#9467bd'], ecolor='black', capsize=10)
+        plt.bar(y_pos, performance, color=['#1f77b4', '#ff7f0e', '#d62728', '#9467bd'], ecolor='black', capsize=10, rwidth = width)
         
     plt.xticks(y_pos, objects)
     plt.ylim([0,1])
@@ -80,13 +78,12 @@ def plotbars(flashuni, beepuni, flashcongr, beepcongr, title1, title2, subjid = 
         beepcongrrterr = calcstderr(beepcongr, 'rt')
         #allcongrrterr = (flashcongrrterr + beepcongrrterr) / 2
         plt.bar(y_pos, performance, yerr=[flashunirterr, flashcongrrterr, beepunirterr, beepcongrrterr], 
-                color=['#1f77b4', '#ff7f0e', '#d62728', '#9467bd'], ecolor='black', capsize=10)
+                color=['#1f77b4', '#ff7f0e', '#d62728', '#9467bd'], ecolor='black', capsize=10, rwidth = width)
     else:
-        plt.bar(y_pos, performance, color=['#1f77b4', '#ff7f0e', '#d62728', '#9467bd'], ecolor='black', capsize=10)
+        plt.bar(y_pos, performance, color=['#1f77b4', '#ff7f0e', '#d62728', '#9467bd'], ecolor='black', capsize=10, rwidth = width)
         
     plt.xticks(y_pos, objects)
     plt.ylim([0,2])
-
 
 # In[3]:
 
